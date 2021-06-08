@@ -705,9 +705,10 @@ class Podman:
         return subprocess.check_output(cmd_ls)
 
     def run(self, podman_args, cmd='', cmd_args=None, wait=True, sleep=1, obj=None):
+        extra_args = shlex.split(os.environ.get("PODMAN_RUN_EXTRA_ARGS", ""))
         cmd_args = cmd_args or []
         xargs = self.compose.get_podman_args(cmd) if cmd else []
-        cmd_ls = [self.podman_path, *podman_args, cmd] + xargs + cmd_args
+        cmd_ls = [self.podman_path, *podman_args, cmd] + extra_args + xargs + cmd_args
         print(" ".join(cmd_ls))
         if self.dry_run:
             return None
